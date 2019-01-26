@@ -30,3 +30,7 @@ epscu:	concrete strain at crushing strength (double, must be negative)
 ### 3. Typical stress-strain relation
 
 ![Concrete01](./Concrete01.png)
+
+Sample hysteresis:
+
+![Concrete01_sample](./Concrete01_sample.png)
