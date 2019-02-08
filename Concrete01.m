@@ -1,15 +1,11 @@
 % =========================================================================
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%   ACTS Hardware-in-the-loop Simulation Software   %%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%   ?017, ACTS Technologies Inc.   %%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%   All Rights Reserved   %%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%   DO NOT DISTRIBUTE   %%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Developed by Tianyang Joe Qiao, 2019
 % =========================================================================
 
 function [MatData,Result] = Concrete01(action,MatData,edp)
-% ELASTICNOTENSION elastic-no-tension material
-% varargout = ElasticNoTension(action,MatData,stress)
+% Concrete01 material
+% ONLY for displacement-based simulation!
+% varargout = Concrete01(action,MatData,stress)
 %
 % action  : switch with following possible values
 %              'initialize'         initialize internal variables

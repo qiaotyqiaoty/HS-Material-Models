@@ -10,7 +10,7 @@
 clear all; close all; clc;
 
 % forcing function
-Amp = [0.003 0.005 0.007 0.009 0.01 0.012 0.014 0.018 0.02];
+Amp = [0.003 0.005 0.007 0.009 0.01 0.012 0.014 0.018 0.02 0.04];
 Increment = 0.02;
 nCycles = 2;
 Time = zeros([length(Amp)*floor(6.28/Increment) 1]);
@@ -30,10 +30,10 @@ Element = 'Concrete01';
 
 MatData = zeros(1,50);
 MatData(1,1) = 1;      % unique material tag
-MatData(1,2) = 45;          % fpc: concrete maximum compressive strength (negative)
-MatData(1,3) = 0.0035;      % epsc:
-MatData(1,4) = 14;          % fpcu:
-MatData(1,5) = 0.014;       % epscu:
+MatData(1,2) = 75;          % fpc: concrete maximum compressive strength (negative)
+MatData(1,3) = 0.008;      % epsc:
+MatData(1,4) = 60;          % fpcu:
+MatData(1,5) = 0.02;       % epscu:
 MatData(1,6) = 0.925;
 MatData(1,7) = 0;
 MatData(1,8) = 0;
