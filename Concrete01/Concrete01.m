@@ -174,15 +174,15 @@ switch action
    % ======================================================================
    case 'getFlexibility'
        if strainT < 0
-           Result = 1/E;
+           Result = 1/Ec0;
        else
-           Result = 1e10*1/E;  % Take 10^10*(1/E) as infinity
+           Result = 1e10*1/Ec0;  % Take 10^10*(1/E) as infinity
        end
       
    % ======================================================================
    case 'getStiffness'
        if strainT < 0
-           Result = E;
+           Result = Ec0;
        else
            Result = 1e-10;  % Infinite small
        end
