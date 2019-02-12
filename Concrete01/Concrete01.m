@@ -184,7 +184,7 @@ switch action
        if strainT < 0
            Result = E;
        else
-           Result = 1e10*1/E;  % Take 10^10*(1/E) as infinity
+           Result = 1e-10;  % Infinite small
        end
       
    % ======================================================================
