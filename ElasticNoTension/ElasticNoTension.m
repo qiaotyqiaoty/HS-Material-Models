@@ -26,7 +26,7 @@ function [MatData,Result] = ElasticNoTension(action,MatData,edp)
 %#codegen
 % extract material properties
 tag = MatData(1,1);      % unique material tag
-E   = MatData(1,2);      % initial elastic modulus (compression)
+E   = MatData(1,2);      % E: initial elastic modulus (compression)
 % state variables
 stressT = MatData(1,3);  
 strainT = MatData(1,4);  
