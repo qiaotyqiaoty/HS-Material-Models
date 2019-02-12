@@ -4,12 +4,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % =========================================================================
 
-% Check material
+%% Testing template for Concrete01 material
 
 % clean start
 clear all; close all; clc;
 
-% forcing function
+% loading function
 Amp = [0.003 0.005 0.007 0.009 0.01 0.012 0.014 0.018 0.02 0.04];
 Increment = 0.02;
 nCycles = 2;
@@ -21,22 +21,28 @@ for i=1:length(Amp)
     end
 end
 
-% material property
+% Material property
 % Element = 'Elastic';
 % Element = 'BLElastic';
 % Element = 'BLHysteretic';
 % Element = 'ElasticNoTension';
-Element = 'Concrete01';
+Element = 'Concrete01';   % Material type name
 
 MatData = zeros(1,50);
-MatData(1,1) = 1;      % unique material tag
-MatData(1,2) = 75;          % fpc: concrete maximum compressive strength (negative)
-MatData(1,3) = 0.008;      % epsc:
-MatData(1,4) = 60;          % fpcu:
-MatData(1,5) = 0.02;       % epscu:
-MatData(1,6) = 0.925;
+
+% User input material properties
+MatData(1,1) = 1;         % unique material tag
+MatData(1,2) = 75;        % fpc: concrete maximum compressive strength (negative)
+MatData(1,3) = 0.008;     % epsc: concrete strain at maximum strength (negative)
+MatData(1,4) = 60;        % fpcu: concrete crushing strength (negative)
+MatData(1,5) = 0.02;      % epscu: concrete strain at crushing strength (negative)
+
+% trial variables
+MatData(1,6) = 0;
 MatData(1,7) = 0;
 MatData(1,8) = 0;
+
+% state history variables
 MatData(1,9) = 1;
 MatData(1,10) = 0.07;
 MatData(1,11) = 1;
