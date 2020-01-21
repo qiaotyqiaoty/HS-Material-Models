@@ -13,8 +13,6 @@
 
 Negative elastic modulus values will be changed to positive. 
 
-
-
 ### ElasticNoTension
 
 1 parameter should be defined for ElasticNoTension model:
