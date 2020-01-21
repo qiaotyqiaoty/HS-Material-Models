@@ -1,5 +1,5 @@
 # Supplemental Material Models for HSS
-[TOC]
+
 
 ## All Materials
 
@@ -23,7 +23,7 @@ Negative elastic modulus values will be changed to positive.
 
 Zero stress is forced when strain > 0 (no tension stress).
 
-![ElasticNoTension_sample](.\fig\ElasticNoTension_sample.jpg)
+![ElasticNoTension_sample](https://github.com/qiaotyqiaoty/HS-Material-Models/blob/master/fig/ElasticNoTension_sample.jpg)
 
 ### Concrete01
 
@@ -50,7 +50,7 @@ Tips:
 
 - This material model behaves very similarly as Concrete01 in OpenSees. See source code at OpenSees Github: https://github.com/OpenSees/OpenSees/blob/master/SRC/material/uniaxial/Concrete01.cpp
 
-![Concrete01_sample](.\fig\Concrete01_sample.png)
+![Concrete01_sample](https://github.com/qiaotyqiaoty/HS-Material-Models/blob/master/fig/Concrete01_sample.png)
 
 ### SelfCentering
 
