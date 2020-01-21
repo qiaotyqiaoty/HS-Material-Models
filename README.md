@@ -51,7 +51,20 @@ Tips:
 
 ### SelfCentering
 
+7 parameters should be defined for SelfCentering model:
 
+* k1
 
-### SelfCentering02
+* k2
 
+* ActF
+
+* beta
+
+* SlipDef
+
+* BearDef
+
+* rBear
+
+This material is programmed based on OpenSees. Please see OpenSees Wiki to determine the parameters above.
