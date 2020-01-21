@@ -17,18 +17,17 @@ V = 0.05*sin(Time);
 % Element = 'Elastic';
 % Element = 'BLElastic';
 % Element = 'BLHysteretic';
-Element = 'ElasticNoTension';
+Element = 'Elastic02';
 MatData = zeros(1,50);
 
 % User input material properties
 MatData(1,1) = 1;         % unique material tag
-MatData(1,2) = 200000;    % E: initial elastic modulus (compression)
+MatData(1,2) = 1;  % Epos: initial elastic modulus (tensile)
+MatData(1,3) = 200000;       % Eneg: initial elastic modulus (compressive)
 
 % state variables
-MatData(1,3) = 0;  
 MatData(1,4) = 0;
 MatData(1,5) = 0.0;
-MatData(1,6) = 1.0;
 
 % initialize the material
 [MatData,~] = feval(Element,'initialize',MatData);

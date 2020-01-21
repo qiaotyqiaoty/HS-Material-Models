@@ -116,7 +116,7 @@ switch action
                         tangentT = (fpc-fpcu)/(epsc-epscu);
                         stressT = fpc+tangentT*(strainT-epsc);
                     else
-                        tangentT = 0;
+                        tangentT = 1e-10;
                         stressT = fpcu;
                     end
                     % ----- End of Envelope -----
@@ -176,13 +176,13 @@ switch action
        if strainT < 0
            Result = 1/Ec0;
        else
-           Result = 1e10*1/Ec0;  % Take 10^10*(1/E) as infinity
+           Result = 1e6*1/Ec0;  % Take 10^6*(1/E) as infinity
        end
       
    % ======================================================================
    case 'getStiffness'
        if strainT < 0
-           Result = Ec0;
+           Result = tangentT;
        else
            Result = 1e-10;  % Infinite small
        end

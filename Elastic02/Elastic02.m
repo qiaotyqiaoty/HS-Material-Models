@@ -7,7 +7,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % =========================================================================
 
-function [MatData,Result] = ElasticNoTension(action,MatData,edp)
+function [MatData,Result] = Elastic02(action,MatData,edp)
 % ELASTICNOTENSION elastic-no-tension material
 % varargout = ElasticNoTension(action,MatData,stress)
 %
@@ -26,10 +26,11 @@ function [MatData,Result] = ElasticNoTension(action,MatData,edp)
 %#codegen
 % extract material properties
 tag = MatData(1,1);      % unique material tag
-E = MatData(1,2);      % Epos: initial elastic modulus (tensile)
+Epos = MatData(1,2);      % Epos: initial elastic modulus (tensile)
+Eneg = MatData(1,3);      % Eneg: initial elastic modulus (compressive)
 % state variables
-stressT = MatData(1,3);  
-strainT = MatData(1,4);
+stressT = MatData(1,4);  
+strainT = MatData(1,5);
 Result = 0;
 
 switch action
@@ -52,37 +53,41 @@ switch action
       
    % ======================================================================
    case 'getStrain'
-       Result = strainT;
+       if strainT > 0.0
+           Result = stressT/Epos;
+       else
+           Result = stressT/Eneg;
+       end
       
    % ======================================================================
    case 'getStress'
        if strainT > 0.0
-           Result = E*strainT;
+           Result = Epos*strainT;
        else
-           Result = 0;
+           Result = Eneg*strainT;
        end
       
    case 'getFlexibility' %x
-       if strainT < 0.0
-           Result = 1/E;
+       if strainT > 0.0
+           Result = 1/Epos;
        else
-           Result = 1e10*1/E;
+           Result = 1/Eneg;
        end
        
    case 'getStiffness'
-       if strainT < 0.0
-           Result = E;
+       if strainT > 0.0
+           Result = Epos;
        else
-           Result = 0;
+           Result = Eneg;
        end
       
    % ======================================================================
    case 'getInitialStiffness'
-       Result = E;
+       Result = max(Epos,Eneg);
       
    % ======================================================================
    case 'getInitialFlexibility'
-       Result = 1/E;
+       Result = 1/max(Epos,Eneg);
         
    % ======================================================================
    case 'commitState'
@@ -93,7 +98,8 @@ end
 
 % Record
 MatData(1,1) = tag;      % unique material tag
-MatData(1,2) = E;        % initial elastic modulus (positive)
-MatData(1,3) = stressT;  % yield stress
-MatData(1,4) = strainT;  % yield strain
+MatData(1,2) = Epos;        % initial elastic modulus (positive)
+MatData(1,3) = Eneg;        % initial elastic modulus (negative)
+MatData(1,4) = stressT;  % yield stress
+MatData(1,5) = strainT;  % yield strain
 end
