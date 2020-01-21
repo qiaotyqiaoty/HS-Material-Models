@@ -1,7 +1,6 @@
 # Supplemental Material Models for HSS
 
 
-## All Materials
 
 ### Elastic02
 
