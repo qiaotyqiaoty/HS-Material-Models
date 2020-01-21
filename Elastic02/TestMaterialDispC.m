@@ -22,7 +22,7 @@ MatData = zeros(1,50);
 
 % User input material properties
 MatData(1,1) = 1;         % unique material tag
-MatData(1,2) = 1;  % Epos: initial elastic modulus (tensile)
+MatData(1,2) = 100000;           % Epos: initial elastic modulus (tensile)
 MatData(1,3) = 200000;       % Eneg: initial elastic modulus (compressive)
 
 % state variables
@@ -43,7 +43,7 @@ for nn = 1:length(P)
 end
 
 figure;
-plot(V,P)
+plot(V,P,'LineWidth',2.0)
 xlabel('Displacement')
 ylabel('Force')
 grid
