@@ -1,9 +1,13 @@
 # Supplemental Material Models for HSS
 
 Adding the following materials to HSS software:
+
 Elastic02
+
 ElasticNoTension
+
 Concrete01
+
 SelfCentering
 
 ### Elastic02
