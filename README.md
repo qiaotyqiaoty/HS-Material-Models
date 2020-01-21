@@ -68,3 +68,7 @@ Tips:
 * rBear
 
 This material is programmed based on OpenSees. Please see OpenSees Wiki to determine the parameters above.
+
+![ElasticNoTension_sample](https://github.com/qiaotyqiaoty/HS-Material-Models/blob/master/fig/SelfCentering_sample.jpg)
+
+![ElasticNoTension_sample](https://github.com/qiaotyqiaoty/HS-Material-Models/blob/master/fig/SelfCentering_sample2.jpg)
