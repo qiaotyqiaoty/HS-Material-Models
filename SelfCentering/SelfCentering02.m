@@ -7,7 +7,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % =========================================================================
 
-function [MatData,Result] = SelfCentering(action,MatData,edp)
+function [MatData,Result] = SelfCentering02(action,MatData,edp)
 % ELASTICNOTENSION elastic-no-tension material
 % varargout = ElasticNoTension(action,MatData,stress)
 %
