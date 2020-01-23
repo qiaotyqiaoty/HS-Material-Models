@@ -9,7 +9,7 @@
 
 function [MatData,Result] = ElasticPP(action,MatData,edp)
 % ElasticPP (Elastic Perfectly Plastic) material
-% varargout = ElasticNoTension(action,MatData,stress)
+% varargout = ElasticPP(action,MatData,stress)
 %
 % action  : switch with following possible values
 %              'initialize'         initialize internal variables
