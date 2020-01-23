@@ -2,15 +2,15 @@
 
 Adding the following materials to HSS software:
 
-Elastic02
+**1. Elastic02**
 
-ElasticPP
+**2. ElasticPP**
 
-ElasticNoTension
+**3. ElasticNoTension**
 
-Concrete01
+**4. Concrete01**
 
-SelfCentering
+**5. SelfCentering**
 
 *NOTE: These materials ONLY work for displacement-control!!*
 
