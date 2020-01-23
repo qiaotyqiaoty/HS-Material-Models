@@ -39,6 +39,8 @@ strainCend = MatData(1,13);
 unloadSlopeC = MatData(1,14);
 tangentC = MatData(1,15);
 
+Result = 0;
+
 % Force all parameters negative
 if fpc > 0
     fpc = -fpc;

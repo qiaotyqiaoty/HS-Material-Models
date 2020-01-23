@@ -42,6 +42,7 @@ stressC = MatData(1,12);
 strainC = MatData(1,13);
 tangentC = MatData(1,14);
 
+Result = 0;
 
 switch action
     % ======================================================================
