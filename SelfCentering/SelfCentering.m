@@ -67,6 +67,7 @@ TlowerStrainNeg = MatData(1,37);
 TupperStressNeg = MatData(1,38);
 TlowerStressNeg = MatData(1,39);
 
+Result = 0;
 
 switch action
     % =====================================================================
