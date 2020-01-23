@@ -10,6 +10,9 @@ Concrete01
 
 SelfCentering
 
+*NOTE: These materials ONLY work for displacement-control!!*
+
+
 ### Elastic02
 
 2 parameter should be defined for Elastic02 model:
