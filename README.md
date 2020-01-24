@@ -27,7 +27,7 @@ This is a elastic material with different elastic modulus in tension and in comp
 
 Negative elastic modulus values will be changed to positive. 
 
-![Elastic02_sample](https://github.com/qiaotyqiaoty/HS-Material-Models/blob/master/fig/Elastic02_sample.jpg)
+![Elastic02_sample](https://github.com/qiaotyqiaoty/HS-Material-Models/blob/master/fig/Elastic02_sample.png)
 
 ### ElasticPP
 
@@ -43,7 +43,7 @@ Negative elastic modulus values will be changed to positive.
 
 Negative elastic modulus values will be changed to positive. 
 
-![ElasticPP_sample](https://github.com/qiaotyqiaoty/HS-Material-Models/blob/master/fig/ElasticPP_sample.jpg)
+![ElasticPP_sample](https://github.com/qiaotyqiaoty/HS-Material-Models/blob/master/fig/ElasticPP_sample.png)
 
 ### ElasticNoTension
 
