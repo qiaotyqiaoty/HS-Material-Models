@@ -2,20 +2,23 @@
 
 Adding the following materials to HSS software:
 
-**1. Elastic02**
++ [Elastic02](#elastic02)
++ [ElasticPP](#elasticpp)
++ [ElasticNoTension](#elasticnotension)
++ [Concrete01](#concrete01)
++ [SelfCentering](#selfcentering)
 
-**2. ElasticPP**
 
-**3. ElasticNoTension**
+**IMPORTANT NOTE: **
 
-**4. Concrete01**
+**These materials ONLY work for displacement-control!!**
 
-**5. SelfCentering**
 
-*NOTE: These materials ONLY work for displacement-control!!*
 
 
 ### Elastic02
+
+This is a elastic material with different elastic modulus in tension and in compression.
 
 2 parameter should be defined for Elastic02 model:
 
@@ -24,6 +27,8 @@ Adding the following materials to HSS software:
 * Eneg:	elastic modulus under negative strain (compressive elastic modulus)
 
 Negative elastic modulus values will be changed to positive. 
+
+![Elastic02_sample](https://github.com/qiaotyqiaoty/HS-Material-Models/blob/master/fig/Elastic02_sample.png)
 
 ### ElasticPP
 
@@ -38,6 +43,8 @@ Negative elastic modulus values will be changed to positive.
 * ezero:  initial strain (put zero if normal material, put strain here to model pre-stressing)
 
 Negative elastic modulus values will be changed to positive. 
+
+![ElasticPP_sample](https://github.com/qiaotyqiaoty/HS-Material-Models/blob/master/fig/ElasticPP_sample.png)
 
 ### ElasticNoTension
 
