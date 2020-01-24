@@ -103,6 +103,14 @@ Tips:
 
 This material is programmed based on OpenSees. Please see OpenSees Wiki to determine the parameters above.
 
+SelfCentering model:
+
+![ElasticNoTension_model](https://github.com/qiaotyqiaoty/HS-Material-Models/blob/master/fig/SelfCentering_model.png)
+
+SelfCentering sample:
+
 ![ElasticNoTension_sample](https://github.com/qiaotyqiaoty/HS-Material-Models/blob/master/fig/SelfCentering_sample.png)
+
+SelfCentering sample with slippage:
 
 ![ElasticNoTension_sample2](https://github.com/qiaotyqiaoty/HS-Material-Models/blob/master/fig/SelfCentering_sample2.png)
