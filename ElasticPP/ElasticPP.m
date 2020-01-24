@@ -68,7 +68,7 @@ switch action
     case 'setTrialStrain'
         strainT = edp;
         
-        % Compute temp trial stress
+        % Compute temp trial stress (only using modulus)
         sigT = E * (strainT - ezero - ep);
         % Yield function
         if sigT >= 0.0
@@ -79,9 +79,11 @@ switch action
         % Yield?
         fYieldSurface = - E * eps;
         if f <= fYieldSurface
+            % Not yielded
             stressT = sigT;
             tangentT = E;
         else
+            % Yielded
             if sigT > 0.0
                 stressT = fyp;
             else

@@ -23,12 +23,11 @@ function [MatData,Result] = SelfCentering(action,MatData,edp)
 % edp     : trial stress or strain
 
 
-%#codegen
-% extract material properties
+% material properties
 tag = MatData(1,1);      % unique material tag
-k1 = MatData(1,2);
-k2 = MatData(1,3);
-ActF = MatData(1,4);
+k1 = MatData(1,2);      % initial stiffness
+k2 = MatData(1,3);      % secondary stiffness
+ActF = MatData(1,4);    % activation force (stress)
 beta = MatData(1,5);
 SlipDef = MatData(1,6);
 BearDef = MatData(1,7);
@@ -115,11 +114,6 @@ switch action
         % =================================================================
     case 'setTrialStrain'
         diffStrain = edp - Cstrain;
-        
-        if abs(diffStrain) < 1e-32
-            Result = 0;
-        end
-        
         Tstrain = edp;
         noSlipStrain = Tstrain - CslipStrain;
         
@@ -137,7 +131,7 @@ switch action
                 elseif SlipDef ~= 0 && noSlipStrain > SlipDef
                     Tstress = SlipF;
                     TslipStrain = CslipStrain + diffStrain;
-                    % med linear
+                    % med linear movement
                 elseif noSlipStrain >= ClowerStrainPos && ...
                         noSlipStrain <= CupperStrainPos
                     Tstress = (noSlipStrain - CactivStrainPos) * k1;
@@ -172,10 +166,12 @@ switch action
                 elseif SlipDef ~= 0 && noSlipStrain < -SlipDef
                     Tstress = -SlipF;
                     TslipStrain = CslipStrain + diffStrain;
+                    % med linear movement
                 elseif (noSlipStrain <= ClowerStrainNeg) && ...
                         (noSlipStrain >= CupperStrainNeg)
                     Tstress = (noSlipStrain - CactivStrainNeg)*k1;
                     Ttangent = k1;
+                    % upper activation
                 elseif noSlipStrain < CupperStrainNeg
                     TupperStressNeg = CupperStressNeg + ...
                         (noSlipStrain - CupperStrainNeg) * k2;
@@ -185,6 +181,7 @@ switch action
                     Tstress = TupperStressNeg;
                     TactivStrainNeg = TupperStrainNeg - Tstress / k1;
                     Ttangent = k2;
+                    % lower activation
                 else
                     TlowerStressNeg = ClowerStressNeg + ...
                         (noSlipStrain - ClowerStrainNeg) * k2;
@@ -249,7 +246,7 @@ switch action
 end
 
 % Record
-MatData(1,1) = tag;      % unique material tag
+MatData(1,1) = tag;
 MatData(1,2) = k1;
 MatData(1,3) = k2;
 MatData(1,4) = ActF;

@@ -27,38 +27,6 @@ MatData(1,6) = 0;   % SlipDef
 MatData(1,7) = 0;   % BearDef
 MatData(1,8) = 0;   % rBear
 
-% state variables
-MatData(1,9) = 0.0;
-MatData(1,10) = 0.0;
-MatData(1,11) = 0.0;
-MatData(1,12) = 0.0;
-MatData(1,13) = 0.0;
-MatData(1,14) = 0.0;
-MatData(1,15) = 0.0;
-MatData(1,16) = 0.0;
-MatData(1,17) = 0.0;
-MatData(1,18) = 0.0;
-MatData(1,19) = 0.0;
-MatData(1,20) = 0.0;
-MatData(1,21) = 0.0;
-MatData(1,22) = 0.0;
-MatData(1,23) = 0.0;
-MatData(1,24) = 0.0;
-MatData(1,25) = 0.0;
-MatData(1,26) = 0.0;
-MatData(1,27) = 0.0;
-MatData(1,28) = 0.0;
-MatData(1,29) = 0.0;
-MatData(1,30) = 0.0;
-MatData(1,31) = 0.0;
-MatData(1,32) = 0.0;
-MatData(1,33) = 0.0;
-MatData(1,34) = 0.0;
-MatData(1,35) = 0.0;
-MatData(1,36) = 0.0;
-MatData(1,37) = 0.0;
-MatData(1,38) = 0.0;
-MatData(1,39) = 0.0;
 
 % initialize the material
 [MatData,~] = feval(Element,'initialize',MatData,0);
