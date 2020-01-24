@@ -2,13 +2,15 @@
 
 Adding the following materials to HSS software:
 
-Elastic02
+**1. Elastic02**
 
-ElasticNoTension
+**2. ElasticPP**
 
-Concrete01
+**3. ElasticNoTension**
 
-SelfCentering
+**4. Concrete01**
+
+**5. SelfCentering**
 
 *NOTE: These materials ONLY work for displacement-control!!*
 
@@ -20,6 +22,20 @@ SelfCentering
 * Epos: 	elastic modulus under positive strain (tensile elastic modulus)
 
 * Eneg:	elastic modulus under negative strain (compressive elastic modulus)
+
+Negative elastic modulus values will be changed to positive. 
+
+### ElasticPP
+
+4 parameter should be defined for Elastic02 model:
+
+* E: 	elastic modulus
+
+* epsyP:	strain at positive yielding point (must be positive value)
+
+* epsyN: 	strain at negative yielding point (must be negative value)
+
+* ezero:  initial strain (put zero if normal material, put strain here to model pre-stressing)
 
 Negative elastic modulus values will be changed to positive. 
 
