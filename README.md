@@ -2,6 +2,13 @@
 
 Adding the following materials to HSS software:
 
+- [Supplemental Material Models for HSS](#supplemental-material-models-for-hss)
+    + [Elastic02](#elastic02)
+    + [ElasticPP](#elasticpp)
+    + [ElasticNoTension](#elasticnotension)
+    + [Concrete01](#concrete01)
+    + [SelfCentering](#selfcentering)
+
 **1. Elastic02**
 
 **2. ElasticPP**
