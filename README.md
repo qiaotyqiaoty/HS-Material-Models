@@ -95,9 +95,9 @@ Tips:
 
 * beta
 
-* SlipDef
+* epsSlip
 
-* BearDef
+* epsBear
 
 * rBear
 
