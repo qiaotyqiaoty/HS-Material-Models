@@ -8,7 +8,9 @@ Adding the following materials to HSS software:
 + [Concrete01](#concrete01)
 + [SelfCentering](#selfcentering)
 
-*NOTE: These materials ONLY work for displacement-control!!*
+**IMPORTANT NOTE: **
+
+**These materials ONLY work for displacement-control!!**
 
 
 
