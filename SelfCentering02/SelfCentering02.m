@@ -23,50 +23,52 @@ function [MatData,Result] = SelfCentering02(action,MatData,edp)
 % edp     : trial stress or strain
 
 
-%#codegen
-% extract material properties
+% material properties
 tag = MatData(1,1);      % unique material tag
-k1 = MatData(1,2);
-k2 = MatData(1,3);
-ActF = MatData(1,4);
+k1 = MatData(1,2);      % initial stiffness
+k2 = MatData(1,3);      % secondary stiffness
+ActF = MatData(1,4);    % activation force (stress)
 beta = MatData(1,5);
 SlipDef = MatData(1,6);
 BearDef = MatData(1,7);
 rBear = MatData(1,8);
+ShiftF = MatData(1,9);
 
 % commit state variables
-Cstrain = MatData(1,9);
-Cstress = MatData(1,10);
-Ctangent = MatData(1,11);
-CactivStrainPos = MatData(1,12);
-CactivStrainNeg = MatData(1,13);
-CslipStrain = MatData(1,14);
-CupperStrainPos = MatData(1,15);
-ClowerStrainPos = MatData(1,16);
-CupperStressPos = MatData(1,17);
-ClowerStressPos = MatData(1,18);
-CupperStrainNeg = MatData(1,19);
-ClowerStrainNeg = MatData(1,20);
-CupperStressNeg = MatData(1,21);
-ClowerStressNeg = MatData(1,22);
-SlipF = MatData(1,23);
-ActDef = MatData(1,24);
-BearF = MatData(1,25);
-Tstrain = MatData(1,26);
-Tstress = MatData(1,27);
-Ttangent = MatData(1,28);
-TactivStrainPos = MatData(1,29);
-TactivStrainNeg = MatData(1,30);
-TslipStrain = MatData(1,31);
-TupperStrainPos = MatData(1,32);
-TlowerStrainPos = MatData(1,33);
-TupperStressPos = MatData(1,34);
-TlowerStressPos = MatData(1,35);
-TupperStrainNeg = MatData(1,36);
-TlowerStrainNeg = MatData(1,37);
-TupperStressNeg = MatData(1,38);
-TlowerStressNeg = MatData(1,39);
+Cstrain = MatData(1,10);
+Cstress = MatData(1,11);
+Ctangent = MatData(1,12);
+CactivStrainPos = MatData(1,13);
+CactivStrainNeg = MatData(1,14);
+CslipStrain = MatData(1,15);
+CupperStrainPos = MatData(1,16);
+ClowerStrainPos = MatData(1,17);
+CupperStressPos = MatData(1,18);
+ClowerStressPos = MatData(1,19);
+CupperStrainNeg = MatData(1,20);
+ClowerStrainNeg = MatData(1,21);
+CupperStressNeg = MatData(1,22);
+ClowerStressNeg = MatData(1,23);
+SlipF = MatData(1,24);
+ActDef = MatData(1,25);
+BearF = MatData(1,26);
+Tstrain = MatData(1,27);
+Tstress = MatData(1,28);
+Ttangent = MatData(1,29);
+TactivStrainPos = MatData(1,30);
+TactivStrainNeg = MatData(1,31);
+TslipStrain = MatData(1,32);
+TupperStrainPos = MatData(1,33);
+TlowerStrainPos = MatData(1,34);
+TupperStressPos = MatData(1,35);
+TlowerStressPos = MatData(1,36);
+TupperStrainNeg = MatData(1,37);
+TlowerStrainNeg = MatData(1,38);
+TupperStressNeg = MatData(1,39);
+TlowerStressNeg = MatData(1,40);
 
+
+Result = 0;
 
 switch action
     % =====================================================================
@@ -114,11 +116,6 @@ switch action
         % =================================================================
     case 'setTrialStrain'
         diffStrain = edp - Cstrain;
-        
-        if abs(diffStrain) < 1e-32
-            Result = 0;
-        end
-        
         Tstrain = edp;
         noSlipStrain = Tstrain - CslipStrain;
         
@@ -136,7 +133,7 @@ switch action
                 elseif SlipDef ~= 0 && noSlipStrain > SlipDef
                     Tstress = SlipF;
                     TslipStrain = CslipStrain + diffStrain;
-                    % med linear
+                    % med linear movement
                 elseif noSlipStrain >= ClowerStrainPos && ...
                         noSlipStrain <= CupperStrainPos
                     Tstress = (noSlipStrain - CactivStrainPos) * k1;
@@ -171,10 +168,12 @@ switch action
                 elseif SlipDef ~= 0 && noSlipStrain < -SlipDef
                     Tstress = -SlipF;
                     TslipStrain = CslipStrain + diffStrain;
+                    % med linear movement
                 elseif (noSlipStrain <= ClowerStrainNeg) && ...
                         (noSlipStrain >= CupperStrainNeg)
                     Tstress = (noSlipStrain - CactivStrainNeg)*k1;
                     Ttangent = k1;
+                    % upper activation
                 elseif noSlipStrain < CupperStrainNeg
                     TupperStressNeg = CupperStressNeg + ...
                         (noSlipStrain - CupperStrainNeg) * k2;
@@ -184,6 +183,7 @@ switch action
                     Tstress = TupperStressNeg;
                     TactivStrainNeg = TupperStrainNeg - Tstress / k1;
                     Ttangent = k2;
+                    % lower activation
                 else
                     TlowerStressNeg = ClowerStressNeg + ...
                         (noSlipStrain - ClowerStrainNeg) * k2;
@@ -210,7 +210,7 @@ switch action
         
         % =================================================================
     case 'getStress'
-        Result = Tstress;
+        Result = Tstress+ShiftF;
         
     case 'getFlexibility'
         Result = 1/Ttangent;
@@ -248,7 +248,7 @@ switch action
 end
 
 % Record
-MatData(1,1) = tag;      % unique material tag
+MatData(1,1) = tag;
 MatData(1,2) = k1;
 MatData(1,3) = k2;
 MatData(1,4) = ActF;
@@ -256,35 +256,37 @@ MatData(1,5) = beta;
 MatData(1,6) = SlipDef;
 MatData(1,7) = BearDef;
 MatData(1,8) = rBear;
-MatData(1,9) = Cstrain;
-MatData(1,10) = Cstress;
-MatData(1,11) = Ctangent;
-MatData(1,12) = CactivStrainPos;
-MatData(1,13) = CactivStrainNeg;
-MatData(1,14) = CslipStrain;
-MatData(1,15) = CupperStrainPos;
-MatData(1,16) = ClowerStrainPos;
-MatData(1,17) = CupperStressPos;
-MatData(1,18) = ClowerStressPos;
-MatData(1,19) = CupperStrainNeg;
-MatData(1,20) = ClowerStrainNeg;
-MatData(1,21) = CupperStressNeg;
-MatData(1,22) = ClowerStressNeg;
-MatData(1,23) = SlipF;
-MatData(1,24) = ActDef;
-MatData(1,25) = BearF;
-MatData(1,26) = Tstrain;
-MatData(1,27) = Tstress;
-MatData(1,28) = Ttangent;
-MatData(1,29) = TactivStrainPos;
-MatData(1,30) = TactivStrainNeg;
-MatData(1,31) = TslipStrain;
-MatData(1,32) = TupperStrainPos;
-MatData(1,33) = TlowerStrainPos;
-MatData(1,34) = TupperStressPos;
-MatData(1,35) = TlowerStressPos;
-MatData(1,36) = TupperStrainNeg;
-MatData(1,37) = TlowerStrainNeg;
-MatData(1,38) = TupperStressNeg;
-MatData(1,39) = TlowerStressNeg;
+MatData(1,9) = ShiftF;
+MatData(1,10) = Cstrain;
+MatData(1,11) = Cstress;
+MatData(1,12) = Ctangent;
+MatData(1,13) = CactivStrainPos;
+MatData(1,14) = CactivStrainNeg;
+MatData(1,15) = CslipStrain;
+MatData(1,16) = CupperStrainPos;
+MatData(1,17) = ClowerStrainPos;
+MatData(1,18) = CupperStressPos;
+MatData(1,19) = ClowerStressPos;
+MatData(1,20) = CupperStrainNeg;
+MatData(1,21) = ClowerStrainNeg;
+MatData(1,22) = CupperStressNeg;
+MatData(1,23) = ClowerStressNeg;
+MatData(1,24) = SlipF;
+MatData(1,25) = ActDef;
+MatData(1,26) = BearF;
+MatData(1,27) = Tstrain;
+MatData(1,28) = Tstress;
+MatData(1,29) = Ttangent;
+MatData(1,30) = TactivStrainPos;
+MatData(1,31) = TactivStrainNeg;
+MatData(1,32) = TslipStrain;
+MatData(1,33) = TupperStrainPos;
+MatData(1,34) = TlowerStrainPos;
+MatData(1,35) = TupperStressPos;
+MatData(1,36) = TlowerStressPos;
+MatData(1,37) = TupperStrainNeg;
+MatData(1,38) = TlowerStrainNeg;
+MatData(1,39) = TupperStressNeg;
+MatData(1,40) = TlowerStressNeg;
+
 end
