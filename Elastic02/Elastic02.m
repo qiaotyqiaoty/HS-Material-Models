@@ -1,15 +1,15 @@
 % =========================================================================
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%   ACTS Hardware-in-the-loop Simulation Software   %%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%   ?017, ACTS Technologies Inc.   %%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%   All Rights Reserved   %%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%   DO NOT DISTRIBUTE   %%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%% By Joe Tianyang Qiao, March, 2020 %%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % =========================================================================
 
 function [MatData,Result] = Elastic02(action,MatData,edp)
-% ELASTICNOTENSION elastic-no-tension material
-% varargout = ElasticNoTension(action,MatData,stress)
+% ELASTIC02 Elastic 02 material
+% This material offers different modulus values for positive and negative
+% directions
 %
 % action  : switch with following possible values
 %              'initialize'         initialize internal variables
@@ -29,10 +29,9 @@ tag = MatData(1,1);      % unique material tag
 Epos = MatData(1,2);      % Epos: initial elastic modulus (tensile)
 Eneg = MatData(1,3);      % Eneg: initial elastic modulus (compressive)
 % state variables
-stressT = MatData(1,4);  
-strainT = MatData(1,5);
-strainC = MatData(1,6);
-tangentT = MatData(1,7);
+stressT = MatData(1,4);     % trial stress
+strainT = MatData(1,5);     % trial strain
+strainC = MatData(1,6);     % committed strain (optional)
 Result = 0;
 
 switch action
@@ -40,9 +39,7 @@ switch action
    case 'initialize'
        strainT = 0;
        stressT = 0;
-       stressC = 0;
        strainC = 0;
-       tangentT = max(Epos,Eneg);
        Result = 0;
        
    % ======================================================================
@@ -58,7 +55,7 @@ switch action
       
    % ======================================================================
    case 'getStrain'
-       if strainT > -eps
+       if strainT > 0.0
            Result = stressT/Epos;
        else
            Result = stressT/Eneg;
@@ -66,14 +63,14 @@ switch action
       
    % ======================================================================
    case 'getStress'
-       if strainT > -eps
+       if strainT > 0.0
            Result = Epos*strainT;
        else
            Result = Eneg*strainT;
        end
       
    case 'getFlexibility'
-       if strainC > -eps
+       if strainC > 0.0
            Result = 1/Epos;
        else
            Result = 1/Eneg;
@@ -82,9 +79,9 @@ switch action
    % ======================================================================
    case 'getStiffness'
        if strainT > 0.0
-           Result = Epos;   %Epos=1
+           Result = Epos;
        elseif strainT <0.0
-           Result = Eneg;   %Eneg=29037
+           Result = Eneg;
        else
            Result = min(Epos,Eneg);
        end
@@ -95,7 +92,7 @@ switch action
       
    % ======================================================================
    case 'getInitialFlexibility'
-       Result = 1/tangentT;
+       Result = 1/max(Epos,Eneg);
         
    % ======================================================================
    case 'commitState'
@@ -109,8 +106,7 @@ end
 MatData(1,1) = tag;      % unique material tag
 MatData(1,2) = Epos;        % initial elastic modulus (positive)
 MatData(1,3) = Eneg;        % initial elastic modulus (negative)
-MatData(1,4) = stressT;  % yield stress
-MatData(1,5) = strainT;  % yield strain
-MatData(1,6) = strainC;  % yield strain
-MatData(1,7) = tangentT;
+MatData(1,4) = stressT;  % trial stress
+MatData(1,5) = strainT;  % trial strain
+MatData(1,6) = strainC;  % committed strain
 end

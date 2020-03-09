@@ -1,5 +1,9 @@
 % =========================================================================
-% Developed by Tianyang Joe Qiao, 2019
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%   ACTS Hardware-in-the-loop Simulation Software   %%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%   DO NOT DISTRIBUTE   %%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%% By Joe Tianyang Qiao, March, 2020 %%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % =========================================================================
 
 function [MatData,Result] = Concrete01(action,MatData,edp)
@@ -85,11 +89,9 @@ switch action
       
    % ======================================================================
    case 'getStrain'
-       if stressT >= 0
-           Result = strainT;
-       else
-           Result = strainT;  % stub
-       end
+       % force-control does not work!
+       % stub
+       Result = strainT;
       
    % ======================================================================
    case 'getStress'
@@ -178,16 +180,12 @@ switch action
        if strainT < 0
            Result = 1/Ec0;
        else
-           Result = 1e6*1/Ec0;  % Take 10^6*(1/E) as infinity
+           Result = 1e10/Ec0;  % Take 10^10*(1/E) as a large value
        end
       
    % ======================================================================
    case 'getStiffness'
-       if strainT < 0
-           Result = tangentT;
-       else
-           Result = 1e-10;  % Infinite small
-       end
+       Result = tangentT;
       
    % ======================================================================
    case 'getInitialStiffness'
@@ -199,7 +197,6 @@ switch action
         
    % ======================================================================
    case 'commitState'
-       % State variables
        strainC = strainT;
        stressC = stressT;
        tangentC = tangentT;
@@ -209,7 +206,7 @@ switch action
 end
 
 % Record
-MatData(1,1) = tag;      % unique material tag
+MatData(1,1) = tag;
 MatData(1,2) = fpc;
 MatData(1,3) = epsc;
 MatData(1,4) = fpcu;

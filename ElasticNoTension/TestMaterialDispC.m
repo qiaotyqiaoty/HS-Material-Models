@@ -31,16 +31,16 @@ MatData(1,5) = 0.0;
 MatData(1,6) = 1.0;
 
 % initialize the material
-[MatData,~] = feval(Element,'initialize',MatData);
-[MatData,E] = feval(Element,'getInitialStiffness',MatData);
-[MatData,Fs] = feval(Element,'getInitialFlexibility',MatData);
+[MatData,~] = feval(Element,'initialize',MatData,0);
+[MatData,E] = feval(Element,'getInitialStiffness',MatData,0);
+[MatData,Fs] = feval(Element,'getInitialFlexibility',MatData,0);
  
 % loop through the force vector
 P = zeros(length(V),1);
 for nn = 1:length(P)
     [MatData,~] = feval(Element,'setTrialStrain',MatData,V(nn));
-    [MatData,P(nn)] = feval(Element,'getStress',MatData);
-    [MatData,~] = feval(Element,'commitState',MatData);
+    [MatData,P(nn)] = feval(Element,'getStress',MatData,0);
+    [MatData,~] = feval(Element,'commitState',MatData,0);
 end
 
 figure;
