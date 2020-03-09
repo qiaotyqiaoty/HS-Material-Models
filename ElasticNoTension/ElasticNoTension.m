@@ -30,6 +30,7 @@ E = MatData(1,2);      % Epos: initial elastic modulus (tensile)
 % state variables
 stressT = MatData(1,3);  
 strainT = MatData(1,4);
+tangentT = MatData(1,5);
 Result = 0;
 
 switch action
@@ -70,11 +71,7 @@ switch action
        end
        
    case 'getStiffness'
-       if strainT < 0.0
-           Result = E;
-       else
-           Result = 0;
-       end
+       Result = tangentT;
       
    % ======================================================================
    case 'getInitialStiffness'
@@ -86,6 +83,11 @@ switch action
         
    % ======================================================================
    case 'commitState'
+       if strainT > 0
+           tangentT = E;
+       else
+           tangentT = 0;
+       end
        Result = 0;
       
    % ======================================================================
@@ -96,4 +98,6 @@ MatData(1,1) = tag;      % unique material tag
 MatData(1,2) = E;        % initial elastic modulus (positive)
 MatData(1,3) = stressT;  % yield stress
 MatData(1,4) = strainT;  % yield strain
+MatData(1,5) = tangentT;  % yield stress
+
 end

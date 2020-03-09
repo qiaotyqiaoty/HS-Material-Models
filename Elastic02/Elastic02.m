@@ -31,6 +31,8 @@ Eneg = MatData(1,3);      % Eneg: initial elastic modulus (compressive)
 % state variables
 stressT = MatData(1,4);  
 strainT = MatData(1,5);
+strainC = MatData(1,6);
+tangentT = MatData(1,7);
 Result = 0;
 
 switch action
@@ -38,6 +40,9 @@ switch action
    case 'initialize'
        strainT = 0;
        stressT = 0;
+       stressC = 0;
+       strainC = 0;
+       tangentT = max(Epos,Eneg);
        Result = 0;
        
    % ======================================================================
@@ -53,7 +58,7 @@ switch action
       
    % ======================================================================
    case 'getStrain'
-       if strainT > 0.0
+       if strainT > -eps
            Result = stressT/Epos;
        else
            Result = stressT/Eneg;
@@ -61,24 +66,27 @@ switch action
       
    % ======================================================================
    case 'getStress'
-       if strainT > 0.0
+       if strainT > -eps
            Result = Epos*strainT;
        else
            Result = Eneg*strainT;
        end
       
-   case 'getFlexibility' %x
-       if strainT > 0.0
+   case 'getFlexibility'
+       if strainC > -eps
            Result = 1/Epos;
        else
            Result = 1/Eneg;
        end
-       
+   
+   % ======================================================================
    case 'getStiffness'
        if strainT > 0.0
-           Result = Epos;
+           Result = Epos;   %Epos=1
+       elseif strainT <0.0
+           Result = Eneg;   %Eneg=29037
        else
-           Result = Eneg;
+           Result = min(Epos,Eneg);
        end
       
    % ======================================================================
@@ -87,10 +95,11 @@ switch action
       
    % ======================================================================
    case 'getInitialFlexibility'
-       Result = 1/max(Epos,Eneg);
+       Result = 1/tangentT;
         
    % ======================================================================
    case 'commitState'
+       strainC = strainT;
        Result = 0;
       
    % ======================================================================
@@ -102,4 +111,6 @@ MatData(1,2) = Epos;        % initial elastic modulus (positive)
 MatData(1,3) = Eneg;        % initial elastic modulus (negative)
 MatData(1,4) = stressT;  % yield stress
 MatData(1,5) = strainT;  % yield strain
+MatData(1,6) = strainC;  % yield strain
+MatData(1,7) = tangentT;
 end

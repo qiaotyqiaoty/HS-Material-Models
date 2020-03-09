@@ -89,7 +89,7 @@ switch action
             else
                 stressT = fyn;
             end
-            tangentT = 0.0;
+            tangentT = 0;
         end
         
         Result = 0;

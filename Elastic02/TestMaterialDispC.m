@@ -22,7 +22,7 @@ MatData = zeros(1,50);
 
 % User input material properties
 MatData(1,1) = 1;         % unique material tag
-MatData(1,2) = 100000;           % Epos: initial elastic modulus (tensile)
+MatData(1,2) = 1;           % Epos: initial elastic modulus (tensile)
 MatData(1,3) = 200000;       % Eneg: initial elastic modulus (compressive)
 
 % state variables
@@ -30,16 +30,16 @@ MatData(1,4) = 0;
 MatData(1,5) = 0.0;
 
 % initialize the material
-[MatData,~] = feval(Element,'initialize',MatData);
-[MatData,E] = feval(Element,'getInitialStiffness',MatData);
-[MatData,Fs] = feval(Element,'getInitialFlexibility',MatData);
+[MatData,~] = feval(Element,'initialize',MatData,0);
+[MatData,E] = feval(Element,'getInitialStiffness',MatData,0);
+[MatData,Fs] = feval(Element,'getInitialFlexibility',MatData,0);
  
 % loop through the force vector
 P = zeros(length(V),1);
 for nn = 1:length(P)
     [MatData,~] = feval(Element,'setTrialStrain',MatData,V(nn));
-    [MatData,P(nn)] = feval(Element,'getStress',MatData);
-    [MatData,~] = feval(Element,'commitState',MatData);
+    [MatData,P(nn)] = feval(Element,'getStress',MatData,0);
+    [MatData,~] = feval(Element,'commitState',MatData,0);
 end
 
 figure;
