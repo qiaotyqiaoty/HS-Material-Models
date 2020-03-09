@@ -1,14 +1,13 @@
 % =========================================================================
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%   ACTS Hardware-in-the-loop Simulation Software   %%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%   ?017, ACTS Technologies Inc.   %%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%   All Rights Reserved   %%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%   DO NOT DISTRIBUTE   %%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%% By Joe Tianyang Qiao, March, 2020 %%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % =========================================================================
 
 function [MatData,Result] = ElasticPP(action,MatData,edp)
-% ElasticPP (Elastic Perfectly Plastic) material
+% ElasticPP (Elastic-Perfectly-Plastic) material
 % varargout = ElasticPP(action,MatData,stress)
 %
 % action  : switch with following possible values
@@ -23,13 +22,12 @@ function [MatData,Result] = ElasticPP(action,MatData,edp)
 % edp     : trial stress or strain
 
 
-%#codegen
 % extract material properties
 tag = MatData(1,1);      % unique material tag
-E = MatData(1,2);
-eyp = MatData(1,3);
-eyn = MatData(1,4);
-ezero = MatData(1,5);
+E = MatData(1,2);        % Elastic modulus
+eyp = MatData(1,3);      % Positive yield strain
+eyn = MatData(1,4);      % Negative yield strain
+ezero = MatData(1,5);    % Initial strain (pre-stressing)
 
 % state variables
 ep = MatData(1,6);

@@ -14,9 +14,6 @@ Time = 0:0.01:10;
 V = 0.05*sin(Time);
 
 % Material property
-% Element = 'Elastic';
-% Element = 'BLElastic';
-% Element = 'BLHysteretic';
 Element = 'Elastic02';
 MatData = zeros(1,50);
 
