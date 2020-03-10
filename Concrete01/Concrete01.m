@@ -27,200 +27,234 @@ function [MatData,Result] = Concrete01(action,MatData,edp)
 % extract material properties
 tag   = MatData(1,1);      % unique material tag
 fpc   = MatData(1,2);      % concrete maximum compressive strength (negative)
-epsc  = MatData(1,3);      % concrete strain at maximum strength (negative)
+epsc0  = MatData(1,3);      % concrete strain at maximum strength (negative)
 fpcu  = MatData(1,4);      % concrete crushing strength (negative)
 epscu = MatData(1,5);      % concrete strain at crushing strength (negative)
 % trial variables
-stressT = MatData(1,6);
-strainT = MatData(1,7);
-tangentT = MatData(1,8);
+Tstress = MatData(1,6);
+Tstrain = MatData(1,7);
+Ttangent = MatData(1,8);
 % state history variables
-stressC = MatData(1,9);
-strainC = MatData(1,10);
-strainCmin = MatData(1,11);
-strainCunload = MatData(1,12);
-strainCend = MatData(1,13);
-unloadSlopeC = MatData(1,14);
-tangentC = MatData(1,15);
+Cstress = MatData(1,9);
+Cstrain = MatData(1,10);
+Ctangent = MatData(1,11);
+% Other variables
+TminStrain = MatData(1,12);
+CminStrain = MatData(1,13);
+TendStrain = MatData(1,14);
+CendStrain = MatData(1,15);
+TunloadSlope = MatData(1,16);
+CunloadSlope = MatData(1,17);
+Ec0 = MatData(1,18);
 
 Result = 0;
 
-% Force all parameters negative
-if fpc > 0
-    fpc = -fpc;
-end
-if epsc > 0
-    epsc = -epsc;
-end
-if fpcu > 0
-    fpcu = -fpcu;
-end
-if epscu > 0
-    epscu = -epscu;
-end
 
-% Initial values
-Ec0 = 2*fpc/epsc;
 
 switch action
-   % ======================================================================
-   case 'initialize'
-       strainT = 0;
-       stressT = 0;
-       strainC = 0;
-       stressC = 0;
-       strainCmin = 0;
-       strainCunload = 0;
-       strainCend = 0;
-       tangentC = Ec0;
-       unloadSlopeC = Ec0;
-       tangentT = Ec0;
-       Result = 0;
-       
-   % ======================================================================
-   case 'setTrialStrain'
-       strainT = edp;
-       Result = 0;           
+    % ======================================================================
+    case 'initialize'
+        % Force all parameters negative
+        if fpc > 0
+            fpc = -fpc;
+        end
+        if epsc0 > 0
+            epsc0 = -epsc0;
+        end
+        if fpcu > 0
+            fpcu = -fpcu;
+        end
+        if epscu > 0
+            epscu = -epscu;
+        end
         
-   % ======================================================================
-   case 'setTrialStress'
-       stressT = edp;
-       Result = 0;  
-      
-   % ======================================================================
-   case 'getStrain'
-       % force-control does not work!
-       % stub
-       Result = strainT;
-      
-   % ======================================================================
-   case 'getStress'
-       % Determine change in strain from last state
-       dStrain = strainT - strainC;
-       % Reset trail history variables to last committed state
-       strainTmin = strainCmin;
-       strainTend = strainCend;
-       unloadSlopeT = unloadSlopeC;
-       stressTemp = stressC + unloadSlopeT*dStrain;
-       if strainT > 0
-           % Quick output when strain>0
+        % Initial values
+        Ec0 = 2*fpc/epsc0;
+        Tstrain = 0;
+        Tstress = 0;
+        Ttangent = Ec0;
+        Cstrain = 0;
+        Cstress = 0;
+        Ctangent = Ec0;
+        TminStrain = 0.0;
+        CminStrain = 0.0;
+        TunloadSlope = Ec0;
+        CunloadSlope = Ec0;
+        TendStrain = 0.0;
+        CendStrain = 0.0;
+        
+        Result = 0;
+        
+        
+    case 'setTrialStrain'
+        % Reset trial history variables to last comitted state
+        TminStrain = CminStrain;
+        TendStrain = CendStrain;
+        TunloadSlope = CunloadSlope;
+        Tstress = Cstress;
+        Ttangent = Ctangent;
+        Tstrain = Cstrain;
+        
+        % Determine change in strain from last state
+        dStrain = edp - Cstrain;
+        
+        if abs(dStrain) < eps
             Result = 0;
-       else
-            % Material goes into compression
-            if strainT <= strainC
-                % -----Reload -----
-                if strainT <= strainTmin
-                    strainTmin = strainT;
-                    % ----- Envelope -----
-                    if strainT > epsc
-                        eta = strainT/epsc;
-                        stressT = fpc*(2*eta-eta*eta);
-                        tangentT = Ec0*(1-eta);
-                    elseif strainT > epscu
-                        tangentT = (fpc-fpcu)/(epsc-epscu);
-                        stressT = fpc+tangentT*(strainT-epsc);
-                    else
-                        tangentT = 1e-10;
-                        stressT = fpcu;
-                    end
-                    % ----- End of Envelope -----
-                    % ----- Unload -----
-                    strainTemp = strainTmin;
-                    if strainTemp < epscu
-                        strainTemp = epscu;
-                    end
-                    eta = strainTemp/epsc;
-                    ratio = 0.707*(eta-2)+0.834;
-                    if eta < 2
-                        ratio = 0.145*eta*eta+0.13*eta;
-                    end
-                    strainTend = ratio*epsc;
-                    temp1 = strainTmin - strainTend;
-                    temp2 = stressT/Ec0;
-                    if temp1 > 0
-                        unloadSlopeT = Ec0;
-                    elseif temp1 <= temp2
-                        strainTend = strainTmin - temp1;
-                        unloadSlopeT = stressT/temp1;
-                    else
-                        strainTend = strainTmin - temp2;
-                        unloadSlopeT = Ec0;
-                    end
-                    % ----- End of Unload -----
-                elseif strainT <= strainTend
-                    tangentT = unloadSlopeT;
-                    stressT = tangentT*(strainT-strainTend);
-                else
-                    tangentT = 0;
-                    stressT = 0;
-                end
-                % ----- End of Reload -----
-                
-                if stressTemp > stressT
-                    stressT = stressTemp;
-                    tangentT = unloadSlopeT;
-                end
-                
-            elseif stressTemp <= 0
-                stressT = stressTemp;
-                tangentT = unloadSlopeT;
+        else
+            % Set trial strain
+            Tstrain = edp;
+            
+            % Quick return
+            if Tstrain > 0.0
+                % Quick output when strain>0
+                Tstress = 0;
+                Ttangent = 0;
+                Result = 0;
             else
-                stressT = 0;
-                tangentT = 0;                
+                TunloadSlope = CunloadSlope;
+                tempStress = Cstress + TunloadSlope*Tstrain - TunloadSlope*Cstrain;
+                
+                % Material goes into compression
+                if edp < Cstrain
+                    TminStrain = CminStrain;
+                    TendStrain = CendStrain;
+                    
+                    % -------- Reload ---------
+                    if Tstrain <= TminStrain
+                        
+                        TminStrain = Tstrain;
+                        
+                        % ----- Envelope ------
+                        if Tstrain > epsc0
+                            eta = Tstrain/epsc0;
+                            Tstress = fpc*(2*eta-eta*eta);
+                            Ec0 = 2.0*fpc/epsc0;
+                            Ttangent = Ec0*(1.0-eta);
+                        elseif Tstrain > epscu
+                            Ttangent = (fpc-fpcu)/(epsc0-epscu);
+                            Tstress = fpc + Ttangent*(Tstrain-epsc0);
+                        else
+                            Tstress = fpcu;
+                            Ttangent = 0.0;
+                        end
+                        % -- End of Envelope --
+                        
+                        % ----- Unload ------
+                        tempStrain = TminStrain;
+                        
+                        if tempStrain < epscu
+                            tempStrain = epscu;
+                        end
+                        eta = tempStrain/epsc0;
+                        ratio = 0.707*(eta-2.0) + 0.834;
+                        if eta < 2.0
+                            ratio = 0.145*eta*eta + 0.13*eta;
+                        end
+                        TendStrain = ratio*epsc0;
+                        temp1 = TminStrain - TendStrain;
+                        Ec0 = 2.0*fpc/epsc0;
+                        temp2 = Tstress/Ec0;
+                        
+                        if temp1 > -eps
+                            TunloadSlope = Ec0;
+                        elseif temp1 <= temp2
+                            TendStrain = TminStrain - temp1;
+                            TunloadSlope = Tstress/temp1;
+                        else
+                            TendStrain = TminStrain - temp2;
+                            TunloadSlope = Ec0;
+                        end
+                        % -- End of Unload --
+                        
+                    elseif Tstrain <= TendStrain
+                        Ttangent = TunloadSlope;
+                        Tstress = Ttangent*(Tstrain-TendStrain);
+                    else
+                        Tstress = 0.0;
+                        Ttangent = 0.0;
+                    end
+                    % ----- End of Reload -----
+                    
+                    if tempStress > Tstress
+                        Tstress = tempStress;
+                        Ttangent = TunloadSlope;
+                    end
+                elseif tempStress <= 0.0
+                    % Material goes toward tension
+                    Tstress = tempStress;
+                    Ttangent = TunloadSlope;
+                else
+                    % Made it into tension
+                    Tstress = 0.0;
+                    Ttangent = 0.0;
+                end
+                Result = 0;
             end
-            Result = stressT;
-       end
-       % History variables output
-       strainCmin = strainTmin;
-       unloadSlopeC = unloadSlopeT;
-       strainCend = strainTend;
-      
-   % ======================================================================
-   case 'getFlexibility'
-       if strainT < 0
-           Result = 1/Ec0;
-       else
-           Result = 1e10/Ec0;  % Take 10^10*(1/E) as a large value
-       end
-      
-   % ======================================================================
-   case 'getStiffness'
-       Result = tangentT;
-      
-   % ======================================================================
-   case 'getInitialStiffness'
-       Result = Ec0;
-      
-   % ======================================================================
-   case 'getInitialFlexibility'
-       Result = 1/Ec0;
+        end
         
-   % ======================================================================
-   case 'commitState'
-       strainC = strainT;
-       stressC = stressT;
-       tangentC = tangentT;
-       Result = 0;
-      
-   % ======================================================================
+        
+    case 'setTrialStress'
+        Tstress = edp;
+        Result = 0;
+        
+        
+    case 'getStrain'
+        % force-control does not work!
+        % stub
+        Result = Tstrain;
+        
+        
+    case 'getStress'
+        Result = Tstress;
+        
+        
+    case 'getFlexibility'
+        Result = 1/(Ttangent+eps);
+        
+        % ======================================================================
+    case 'getStiffness'
+        Result = Ttangent;
+        
+        % ======================================================================
+    case 'getInitialStiffness'
+        Result = Ec0;
+        
+        % ======================================================================
+    case 'getInitialFlexibility'
+        Result = 1/Ec0;
+        
+        % ======================================================================
+    case 'commitState'
+        CminStrain = TminStrain;
+        CunloadSlope = TunloadSlope;
+        CendStrain = TendStrain;
+        Cstrain = Tstrain;
+        Cstress = Tstress;
+        Ctangent = Ttangent;
+        Result = 0;
+        
+        % ======================================================================
 end
 
 % Record
 MatData(1,1) = tag;
 MatData(1,2) = fpc;
-MatData(1,3) = epsc;
+MatData(1,3) = epsc0;
 MatData(1,4) = fpcu;
 MatData(1,5) = epscu;
 % trial variables
-MatData(1,6) = stressT;
-MatData(1,7) = strainT;
-MatData(1,8) = tangentT;
+MatData(1,6) = Tstress;
+MatData(1,7) = Tstrain;
+MatData(1,8) = Ttangent;
 % state history variables
-MatData(1,9) = stressC;
-MatData(1,10) = strainC;
-MatData(1,11) = strainCmin;
-MatData(1,12) = strainCunload;
-MatData(1,13) = strainCend;
-MatData(1,14) = unloadSlopeC;
-MatData(1,15) = tangentC;
+MatData(1,9) = Cstress;
+MatData(1,10) = Cstrain;
+MatData(1,11) = Ctangent;
+MatData(1,12) = TminStrain;
+MatData(1,13) = CminStrain;
+MatData(1,14) = TendStrain;
+MatData(1,15) = CendStrain;
+MatData(1,16) = TunloadSlope;
+MatData(1,17) = CunloadSlope;
+MatData(1,18) = Ec0;
 end

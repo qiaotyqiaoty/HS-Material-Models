@@ -83,11 +83,11 @@ switch action
         else
             % Yielded
             if sigT > 0.0
-                stressT = fyp;
+                stressT = fyp+1e-10*E;
             else
-                stressT = fyn;
+                stressT = fyn-1e-10*E;
             end
-            tangentT = 0;
+            tangentT = 1e-10*E;
         end
         
         Result = 0;
@@ -107,8 +107,8 @@ switch action
         Result = stressT;
         
     case 'getFlexibility' %x
-        if abs(tangentT)<eps
-            Result = 1e32;
+        if abs(tangentT) < 1e-10*E
+            Result = 1e-10*E;
         else
             Result = 1/tangentT;
         end
