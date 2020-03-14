@@ -1,8 +1,0 @@
-DLL {
-	global:
-		ElasticPP;
-		ElasticPP_initialize;
-		ElasticPP_terminate;
-	local:
-		*;
-};
