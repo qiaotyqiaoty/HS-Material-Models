@@ -120,7 +120,7 @@ SelfCentering sample with slippage:
 
 ### BoucWen
 
-8 parameters should be defined for BoucWen model:
+8 parameters should be defined:
 
 * alpha: ratio of post-yield stiffness to the initial elastic stiffenss (0<alpha<1)
 
@@ -138,4 +138,4 @@ SelfCentering sample with slippage:
 
 * maxNumIter: maximum number of iterations, default 20
 
-
+![BoucWenSample](https://github.com/qiaotyqiaoty/HS-Material-Models/blob/master/fig/Sample_BoucWen.png)
