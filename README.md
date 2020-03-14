@@ -7,6 +7,7 @@ Adding the following materials to HSS software:
 + [ElasticNoTension](#elasticnotension)
 + [Concrete01](#concrete01)
 + [SelfCentering](#selfcentering)
++ [BoucWen](#boucwen)
 
 
 **IMPORTANT NOTE: **
@@ -83,6 +84,7 @@ Tips:
 
 ![Concrete01_sample](https://github.com/qiaotyqiaoty/HS-Material-Models/blob/master/fig/Concrete01_sample.png)
 
+
 ### SelfCentering
 
 7 parameters should be defined for SelfCentering model:
@@ -114,3 +116,24 @@ SelfCentering sample:
 SelfCentering sample with slippage:
 
 ![ElasticNoTension_sample2](https://github.com/qiaotyqiaoty/HS-Material-Models/blob/master/fig/SelfCentering_sample2.png)
+
+
+### BoucWen
+
+8 parameters should be defined for SelfCentering model:
+
+* alpha: ratio of post-yield stiffness to the initial elastic stiffenss (0<alpha<1)
+
+* ko: initial elastic stiffness
+
+* n: parameter that controls transition from linear to nonlinear range (as n increases the transition becomes sharper; n is usually grater or equal to 1)
+
+* gamma: parameters that control shape of hysteresis loop
+
+* beta: parameters that control shape of hysteresis loop
+
+* Ao: parameters that control tangent stiffness
+
+* tolerance: tolerance for iterations, default 0.00001
+
+* maxNumIter: maximum number of iterations, default 20
