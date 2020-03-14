@@ -25,7 +25,7 @@ MatData(1,4) = 1.7;       % n
 MatData(1,5) = 0.5;        % gamma
 MatData(1,6) = 0.5;           % beta
 MatData(1,7) = 1.75;           % Ao
-MatData(1,8) = 0.00008;          % tolerance
+MatData(1,8) = 0.00001;          % tolerance
 MatData(1,9) = 10;          % maxNumIter
 
 
